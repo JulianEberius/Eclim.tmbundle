@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>completion.py</string>
 	<key>input</key>
-	<string>document</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^ </string>
 	<key>name</key>

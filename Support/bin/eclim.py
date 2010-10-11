@@ -1,6 +1,19 @@
 #!/usr/bin/env python
 import sys, os, subprocess
 from xml.etree import ElementTree
+from util import tooltip
+
+def call_eclim(cmd):
+    popen = subprocess.Popen(
+        cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
+    out, err = popen.communicate()
+    if err or "Connection refused" in out:
+        error_msg = 'Error connecting to Eclim server: '
+        if out: error_msg += out
+        if err: error_msg += err
+        tooltip(error_msg)
+        sys.exit()
+    return out
 
 def get_context():
     project, file = None, None
@@ -17,29 +30,23 @@ def get_context():
 
 def update_java_src(project, file):
     update_cmd = '$ECLIM -command java_src_update \
-                        -p com.sap.research.amc.matchingprocess.dynamic \
-                        -f src/com/sap/research/amc/matchingprocess/dynamic/rules/RuleRegistry.java \
-                        -v'
-    popen = subprocess.Popen(
-        update_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-    out, err = popen.communicate()
+                        -p %s \
+                        -f %s \
+                        -v' % (project, file)
+    out = call_eclim(update_cmd)
     return out
 
 def refresh_file(project, file):
-    update_cmd = '$ECLIM -command project_refresh_file \
-                        -p com.sap.research.amc.matchingprocess.dynamic \
-                        -f src/com/sap/research/amc/matchingprocess/dynamic/rules/RuleRegistry.java'
-    popen = subprocess.Popen(
-        update_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-    out, err = popen.communicate()
+    refresh_cmd = '$ECLIM -command project_refresh_file \
+                        -p %s \
+                        -f %s ' % (project, file)
+    out = call_eclim(refresh_cmd)
     return out
 
 def get_problems(project):
-    update_cmd = '$ECLIM -command problems \
-                        -p com.sap.research.amc.matchingprocess.dynamic'
-    popen = subprocess.Popen(
-        update_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-    out, _ = popen.communicate()
+    get_problems_cmd = '$ECLIM -command problems \
+                        -p %s' % project
+    out = call_eclim(get_problems_cmd)
     return out
     
 def format_problems(problems):

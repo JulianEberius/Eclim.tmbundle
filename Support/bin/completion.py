@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-import sys, subprocess, re
+import sys, os, re
 import eclim
-from util import caret_position, completion_popup, completion_popup_with_snippet
+from util import caret_position, completion_popup, \
+    completion_popup_with_snippet
 
 class ImportProposal(object):
     def __init__(self, name, insert=None, type="None"):
@@ -19,9 +20,7 @@ def call_eclim(project, file, offset, shell=True):
                             -o %i \
                             -e utf-8 \
                             -l compact" % (project, file, offset)
-    popen = subprocess.Popen(
-        complete_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=shell)
-    out, _ = popen.communicate()
+    out = eclim.call_eclim(complete_cmd)
     return out
 
 def to_proposals(eclim_output):
@@ -49,13 +48,23 @@ def to_proposals(eclim_output):
             results.extend(props)
         
     return results, with_snippets
-    
-project, file = eclim.get_context()
-code = sys.stdin.read()
-pos = caret_position(code)
 
-proposals, with_snippets = to_proposals(call_eclim(project, file, pos))
-if with_snippets:
-    completion_popup_with_snippet(proposals)
-else:
-    completion_popup(proposals)
+def completion_command():
+    project, file = eclim.get_context()    
+    # we cannot read the code from TM via stdin, as it will not have 
+    # the correct line endings when editing windows files (it will just have \n)
+    #code = sys.stdin.read()
+
+    # so we read from disk
+    with open(os.environ["TM_FILEPATH"]) as f:
+        code = f.read()
+    pos = caret_position(code)
+
+    proposals, with_snippets = to_proposals(call_eclim(project, file, pos))
+    if with_snippets:
+        completion_popup_with_snippet(proposals)
+    else:
+        completion_popup(proposals)
+
+if __name__ == '__main__':
+    completion_command()

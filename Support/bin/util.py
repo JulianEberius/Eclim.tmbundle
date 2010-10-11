@@ -47,7 +47,7 @@ def identifier_before_dot():
     return ""
     
 def completion_popup(proposals):
-    register_completion_images()
+    #register_completion_images()
     command = TM_DIALOG2+" popup"
     word = current_identifier()
     if word:
@@ -60,9 +60,12 @@ def completion_popup(proposals):
     call_dialog(command, {'suggestions' : options})
 
 def completion_popup_with_snippet(proposals):
-    register_completion_images()
+    #register_completion_images()
+    # tricking TM_DIALOG into just inserting the snippet, but not the
+    # displayed name... do not ask further.
     prefix = "." * max([len(p.display) for p in proposals])
     command = TM_DIALOG2+" popup --staticPrefix "+prefix
+    
     word = current_identifier()
     if word:
         command += " --alreadyTyped "+word
@@ -98,12 +101,13 @@ def get_input(title="Input",default=""):
     return from_plist(out).get('result', None)
 
 def caret_position(code):
-    lines = code.split("\n")
-    line_ending_length = 2
-    line_lengths = [len(l)+line_ending_length for l in lines]
     line_number = int(os.environ['TM_LINE_NUMBER'])
     line_index = int(os.environ['TM_LINE_INDEX'])
-    offset = sum(line_lengths[0:line_number-1]) + line_index
+    pos = 0
+    # find <line_number> line endings and add line_index to get offset into file
+    for i in range(line_number-1):
+        pos = code.find("\n",pos)+1
+    offset = pos + line_index
     return offset
     
 def find_unindexed_files(directory):
@@ -114,7 +118,3 @@ def find_unindexed_files(directory):
     
     stdout, stderr = popen.communicate()
     return stdout.split('\n')
-
-def from_without_import():
-    line = os.environ.get('TM_CURRENT_LINE')
-    return line.find('from ') != -1 and line.find(' import ') == -1
