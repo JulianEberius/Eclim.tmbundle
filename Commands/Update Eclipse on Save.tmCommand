@@ -5,7 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>eclim.py --update</string>
+	<string>WINDOW_TOKEN="`eclim.py --update`"
+
+if [ "$WINDOW_TOKEN" != "-1" ]
+then
+listener.py $WINDOW_TOKEN 2&amp;&gt;1 &amp; &gt; ~/Desktop/err2
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

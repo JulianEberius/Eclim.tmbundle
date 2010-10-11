@@ -1,7 +1,11 @@
 #!/usr/bin/env python
-import sys, os, subprocess
+import sys, os, subprocess, re
+import plistlib
 from xml.etree import ElementTree
 from util import tooltip
+
+DIALOG = os.environ['DIALOG_1']
+JAVA_BUILD_ERRORS_WINDOW = "Java Build Errors"
 
 def call_eclim(cmd):
     popen = subprocess.Popen(
@@ -58,11 +62,61 @@ def format_problems(problems):
         result += parts[2]
     return result
 
+def problems_to_dict(problems):
+    results = {"errors":[]}
+    for pr in problems.split("\n"):
+        if not pr: continue
+        parts = pr.split("|")
+        line = parts[1].split(" col ")[0]
+        message = parts[2]
+        results["errors"].append({"line":line, "message":message})
+    #return plistlib.writePlistToString(results)
+    return results
+
+def close_error_window(window_token):
+    cmd = DIALOG + " -x "+window_token
+    popen = subprocess.Popen(
+        cmd, stdin=None, stdout=None,shell=True)
+    popen.communicate()
+
+def show_error_window(problems):
+    if not problems['errors']:
+        print "-1"
+        return
+    cmd = DIALOG + " -a /Users/ebi/dev/tm_dialog_test.nib"
+    popen = subprocess.Popen(
+        cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
+    out, err = popen.communicate(plistlib.writePlistToString(problems))
+    print out
+    
+def update_error_window(window_token, problems):
+    if not problems['errors']:
+        close_error_window(window_token)
+    else:
+        cmd = DIALOG + " -t "+window_token
+        popen = subprocess.Popen(
+            cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
+        out, err = popen.communicate(plistlib.writePlistToString(problems))
+
+def display_problems(problems):
+    cmd = DIALOG + " -l"
+    popen = subprocess.Popen(
+        cmd, stdin=None, stdout=subprocess.PIPE,shell=True)
+    out, err = popen.communicate()
+    if JAVA_BUILD_ERRORS_WINDOW in out:
+        windows = out.splitlines()
+        for w in windows:
+            m1 = re.match(r'(\d*) \((.*)\)',w)
+            if m1.group(2) == JAVA_BUILD_ERRORS_WINDOW:
+                token = m1.group(1)
+        update_error_window(token, problems)
+    else:
+        show_error_window(problems)
+
 if __name__ == '__main__':
     
     if sys.argv[1] == '--update':
         project, file = get_context()
         problems = update_java_src(project, file)
         refresh_file(project, file)
-        print format_problems(problems)
-        #print get_problems(project)
+        display_problems(problems_to_dict(problems))
