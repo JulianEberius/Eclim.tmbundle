@@ -4,6 +4,13 @@
 <dict>
 	<key>name</key>
 	<string>Eclim</string>
+	<key>ordering</key>
+	<array>
+		<string>809BEED4-F982-4E2A-B801-0B67541E09F0</string>
+		<string>31C5232D-ECFC-42D1-8458-CA0B26CC8B1E</string>
+		<string>6F2450AE-2502-413E-8675-06B79BAF06B8</string>
+		<string>F4039722-DBCC-4A85-AB12-043E64996066</string>
+	</array>
 	<key>uuid</key>
 	<string>7B573C4B-2ECE-48BD-AF1D-47B222BF8CE5</string>
 </dict>

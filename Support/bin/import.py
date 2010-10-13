@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys, os, subprocess
 import eclim
+from util import tooltip
 
 def call_eclim(project, identifier):
 #    eclim.update_java_src(project, file)
@@ -20,13 +21,19 @@ def call_eclim(project, identifier):
     return class_name.strip(), order
 
 def add_import(code, class_name, order):
-    lines = code.split("\n")
-    last_import_idx = 0
-    for idx, l in enumerate(lines):
-        if "{" in l: break
-        if "import" in l: last_import_idx = idx
-    doc = "\n".join(lines[:last_import_idx+1] + ["import "+class_name+";"] + lines[last_import_idx+1:])
-    return doc
+    if class_name=="":
+        tooltip("No class found")
+    elif "\n" in class_name:
+        tooltip("Exception: "+class_name)
+    else:
+        lines = code.split("\n")
+        last_import_idx = 0
+        for idx, l in enumerate(lines):
+            if "{" in l: break
+            if "import" in l: last_import_idx = idx
+        doc = "\n".join(lines[:last_import_idx+1] + ["import "+class_name+";"] + lines[last_import_idx+1:])
+        return doc
+    return code
     
 project, file = eclim.get_context()
 code = sys.stdin.read()

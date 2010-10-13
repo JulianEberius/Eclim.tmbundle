@@ -67,10 +67,10 @@ def problems_to_dict(problems):
     for pr in problems.split("\n"):
         if not pr: continue
         parts = pr.split("|")
+        _file = os.path.split(parts[0])[1]
         line = parts[1].split(" col ")[0]
         message = parts[2]
-        results["errors"].append({"line":line, "message":message})
-    #return plistlib.writePlistToString(results)
+        results["errors"].append({"file":_file, "line":line, "message":message})
     return results
 
 def close_error_window(window_token):
@@ -80,6 +80,8 @@ def close_error_window(window_token):
     popen.communicate()
 
 def show_error_window(problems):
+    ''' prints out the window token returned by tm_dialog to the 
+    calling TM command (or -1 indicating failure)'''
     if not problems['errors']:
         print "-1"
         return
@@ -118,5 +120,7 @@ if __name__ == '__main__':
     if sys.argv[1] == '--update':
         project, file = get_context()
         problems = update_java_src(project, file)
+        #tooltip(problems)
         refresh_file(project, file)
         display_problems(problems_to_dict(problems))
+        

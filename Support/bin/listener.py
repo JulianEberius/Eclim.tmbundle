@@ -14,7 +14,7 @@ while True:
 
     msg = plistlib.readPlistFromString(out1)
     if "returnArgument" not in msg:
-        eclim.close_window(sys.argv[1])
+        eclim.close_error_window(sys.argv[1])
         sys.exit()
     
     url =  'txmt://open?url=file://%s&line=%s' % (
