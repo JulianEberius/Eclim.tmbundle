@@ -26,6 +26,10 @@ def get_context():
     file_path = os.environ['TM_FILEPATH']
     if project_dir:
         project_file = os.path.join(project_dir, '.project')
+        if not os.path.isfile(project_file):
+            # if no project file is found, we are not in
+            # an eclipse java project -> die silently
+            sys.exit()
         project_desc = ElementTree.XML(open(project_file).read())
         project = project_desc.find('name').text
         file = os.path.relpath(file_path, project_dir)
@@ -85,7 +89,9 @@ def show_error_window(problems):
     if not problems['errors']:
         print "-1"
         return
-    cmd = DIALOG + " -a /Users/ebi/dev/tm_dialog_test.nib"
+    path = os.path.join(os.path.dirname(sys.argv[0]), "java_build_errors_panel.nib")
+    cmd = DIALOG + ' -a "' + path + '"'
+    tooltip(cmd)
     popen = subprocess.Popen(
         cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
     out, err = popen.communicate(plistlib.writePlistToString(problems))
