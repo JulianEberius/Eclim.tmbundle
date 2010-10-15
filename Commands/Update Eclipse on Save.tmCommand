@@ -9,7 +9,7 @@
 
 if [ "$WINDOW_TOKEN" != "-1" ]
 then
-listener.py $WINDOW_TOKEN 2&amp;&gt;1 &amp; &gt; ~/Desktop/err2
+listener.py $WINDOW_TOKEN &gt; ~/Desktop/err2 2&gt;&amp;1 &amp;
 fi</string>
 	<key>input</key>
 	<string>none</string>

@@ -7,6 +7,9 @@ from util import tooltip
 DIALOG = os.environ['DIALOG_1']
 JAVA_BUILD_ERRORS_WINDOW = "Java Build Errors"
 
+class NotInEclipseProjectException(Exception):
+    pass
+
 def call_eclim(cmd):
     popen = subprocess.Popen(
         cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
@@ -15,8 +18,7 @@ def call_eclim(cmd):
         error_msg = 'Error connecting to Eclim server: '
         if out: error_msg += out
         if err: error_msg += err
-        tooltip(error_msg)
-        sys.exit()
+        raise Exception(error_msg)
     return out
 
 def get_context():
@@ -29,7 +31,7 @@ def get_context():
         if not os.path.isfile(project_file):
             # if no project file is found, we are not in
             # an eclipse java project -> die silently
-            sys.exit()
+            raise NotInEclipseProjectException()
         project_desc = ElementTree.XML(open(project_file).read())
         project = project_desc.find('name').text
         file = os.path.relpath(file_path, project_dir)
@@ -122,11 +124,16 @@ def display_problems(problems):
         show_error_window(problems)
 
 if __name__ == '__main__':
-    
-    if sys.argv[1] == '--update':
-        project, file = get_context()
-        problems = update_java_src(project, file)
-        #tooltip(problems)
-        refresh_file(project, file)
-        display_problems(problems_to_dict(problems))
-        
+    try:
+        if sys.argv[1] == '--update':
+            project, file = get_context()
+            problems = update_java_src(project, file)
+            #tooltip(problems)
+            refresh_file(project, file)
+            display_problems(problems_to_dict(problems))
+    except NotInEclipseProjectException, e:
+        # die silently
+        print "-1"
+    except Exception, e:
+        tooltip(str(e))
+        print "-1"
