@@ -82,7 +82,7 @@ def call_dialog(command, options=None, shell=True):
     # command += " --suggestions '(%s)'" % to_plist(options)
     popen = subprocess.Popen(
                  command,
-                 stdin=subprocess.PIPE, stdout=None,shell=shell)
+                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=shell)
     # options = None
     if options:
         out, _ = popen.communicate(to_plist(options))
@@ -91,10 +91,7 @@ def call_dialog(command, options=None, shell=True):
     return out
     
 def get_input(title="Input",default=""):
-    if os.environ.get('TM_RopeMate_HUD', False):
-        nib = os.environ['TM_BUNDLE_SUPPORT']+"/input_hud"
-    else:
-        nib = os.environ['TM_BUNDLE_SUPPORT']+"/input"
+    nib = os.environ['TM_BUNDLE_SUPPORT']+"/bin/input"
     out = call_dialog([TM_DIALOG, '-cm', nib], {'title':title, 'result':default}, False)
     if not out:
         return None

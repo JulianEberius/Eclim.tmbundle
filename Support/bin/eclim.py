@@ -93,20 +93,19 @@ def show_error_window(problems):
         return
     path = os.path.join(os.path.dirname(sys.argv[0]), "java_build_errors_panel.nib")
     cmd = DIALOG + ' -a "' + path + '"'
-    tooltip(cmd)
     popen = subprocess.Popen(
         cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
     out, err = popen.communicate(plistlib.writePlistToString(problems))
     print out
     
 def update_error_window(window_token, problems):
-    if not problems['errors']:
-        close_error_window(window_token)
-    else:
-        cmd = DIALOG + " -t "+window_token
-        popen = subprocess.Popen(
-            cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
-        out, err = popen.communicate(plistlib.writePlistToString(problems))
+    # if not problems['errors']:
+    #    close_error_window(window_token)
+    # else:
+    cmd = DIALOG + " -t "+window_token
+    popen = subprocess.Popen(
+        cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
+    out, err = popen.communicate(plistlib.writePlistToString(problems))
 
 def display_problems(problems):
     cmd = DIALOG + " -l"
