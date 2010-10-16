@@ -1,4 +1,4 @@
-**RopeMate.tmbundle**
+**Eclim.tmbundle**
 ===========================
 
 Brings Eclipse Java completion powers (and other neat JDT stuff) to TextMate by integrating with [Eclim](http://eclim.org/).
@@ -12,7 +12,7 @@ Copyright (C) 2010 Julian Eberius
 INSTALLATION
 -------------
 First you need an Eclipse installation (including the JDT of course).
-Then install Eclim from [eclim.org](eclim.org). 
+Then install Eclim from [eclim.org](eclim.org).
 
 
 USAGE
