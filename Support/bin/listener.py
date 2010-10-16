@@ -29,7 +29,7 @@ while True:
 
     # everything is fine, generate an URL for OSX's "open" command
     url =  'txmt://open?url=file://%s&line=%s' % (
-            urllib.quote(os.environ['TM_FILEPATH']), msg['returnArgument'] )
+            urllib.quote(os.environ['TM_FILEPATH']), msg['returnArgument'][0]['line'] )
     
     cmd2 = "open \"%s\"" % url
     popen = subprocess.Popen(

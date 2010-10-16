@@ -18,6 +18,8 @@ def call_eclim(cmd):
         error_msg = 'Error connecting to Eclim server: '
         if out: error_msg += out
         if err: error_msg += err
+        if "Connection refused" in out:
+            error_msg += " Is Eclipse running?"
         raise Exception(error_msg)
     return out
 
