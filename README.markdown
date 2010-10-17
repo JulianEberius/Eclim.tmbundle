@@ -13,7 +13,10 @@ INSTALLATION
 -------------
 First you need an Eclipse installation (including the JDT of course).
 Then install Eclim from [eclim.org](eclim.org).
-
+**Update:** You'll also need to set an environment variable named ECLIM in TM to point
+to the eclim script, which is located in your Eclipse directory after installing Eclim.
+So in TextMate->Preferences->Advanced->Shell_Variables add a variable ECLIM with a value
+"/YOUR_ECLIPSE_DIR/eclim".
 
 USAGE
 -----
