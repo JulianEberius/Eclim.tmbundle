@@ -7,13 +7,13 @@ from util import current_identifier, caret_position
 def call_eclim(project, file, offset, ident_len, shell=True):
     eclim.update_java_src(project, file)
 
-    complete_cmd = "$ECLIM -command java_search \
+    go_to_cmd = "$ECLIM -command java_search \
                             -n %s \
                             -f %s \
                             -o %i \
                             -e utf-8 \
                             -l %i" % (project, file, offset, ident_len)
-    out = eclim.call_eclim(complete_cmd)
+    out = eclim.call_eclim(go_to_cmd)
     return out
     
 def to_list(locations):
@@ -37,7 +37,7 @@ def go_to_location(loc):
         cmd, stdin=None, stdout=None,shell=True)
     popen.communicate()
 
-def completion_command():
+def go_to_definition_command():
     project, file = eclim.get_context()    
     # we cannot read the code from TM via stdin, as it will not have 
     # the correct line endings when editing windows files (it will just have \n)
@@ -56,4 +56,4 @@ def completion_command():
         go_to_location(locations[0])
 
 if __name__ == '__main__':
-    completion_command()
+    go_to_definition_command()

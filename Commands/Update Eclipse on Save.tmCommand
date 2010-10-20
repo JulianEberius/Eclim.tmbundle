@@ -16,7 +16,7 @@ fi</string>
 	<key>keyEquivalent</key>
 	<string>@s</string>
 	<key>name</key>
-	<string>Update Eclipse/Show Errors on Save</string>
+	<string>Java Update Eclipse/Show Errors on Save</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

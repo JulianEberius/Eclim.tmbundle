@@ -5,18 +5,19 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>import.py</string>
+	<string>refactor.py --rename
+echo "`cat "$TM_FILEPATH"`"</string>
 	<key>input</key>
-	<string>document</string>
+	<string>none</string>
 	<key>keyEquivalent</key>
-	<string>@I</string>
+	<string>~@r</string>
 	<key>name</key>
-	<string>Java ImportClass Under Cursor</string>
+	<string>Java Rename</string>
 	<key>output</key>
 	<string>replaceDocument</string>
 	<key>scope</key>
 	<string>source.java</string>
 	<key>uuid</key>
-	<string>809BEED4-F982-4E2A-B801-0B67541E09F0</string>
+	<string>CC868DF0-22B4-409B-AB1E-510A4DAB15E4</string>
 </dict>
 </plist>

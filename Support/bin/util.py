@@ -91,7 +91,10 @@ def call_dialog(command, options=None, shell=True):
     return out
     
 def get_input(title="Input",default=""):
-    nib = os.environ['TM_BUNDLE_SUPPORT']+"/bin/input"
+    if os.environ.get('TM_RopeMate_HUD', False):
+        nib = os.environ['TM_BUNDLE_SUPPORT']+"/bin/input_hud"
+    else:
+        nib = os.environ['TM_BUNDLE_SUPPORT']+"/bin/input"
     out = call_dialog([TM_DIALOG, '-cm', nib], {'title':title, 'result':default}, False)
     if not out:
         return None
@@ -106,12 +109,3 @@ def caret_position(code):
         pos = code.find("\n",pos)+1
     offset = pos + line_index
     return offset
-    
-def find_unindexed_files(directory):
-    """ finds all files that have changed since the .ropeproject/globalnames was last updated"""
-    popen = subprocess.Popen(
-                 "find %s -newer %s/.ropeproject/globalnames -iname '*.py'" % (directory, directory),
-                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
-    
-    stdout, stderr = popen.communicate()
-    return stdout.split('\n')

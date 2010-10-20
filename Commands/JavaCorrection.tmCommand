@@ -11,7 +11,7 @@
 	<key>keyEquivalent</key>
 	<string>@</string>
 	<key>name</key>
-	<string>JavaCorrection</string>
+	<string>Java Correction</string>
 	<key>output</key>
 	<string>replaceDocument</string>
 	<key>scope</key>

@@ -11,7 +11,7 @@
 	<key>keyEquivalent</key>
 	<string>^ </string>
 	<key>name</key>
-	<string>JavaCompletion</string>
+	<string>Java Completion</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

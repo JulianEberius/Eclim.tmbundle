@@ -93,7 +93,7 @@ def show_error_window(problems):
     if not problems['errors']:
         print "-1"
         return
-    path = os.path.join(os.path.dirname(sys.argv[0]), "java_build_errors_panel.nib")
+    path = os.path.join(os.path.dirname(sys.argv[0]), "build_errors.nib")
     cmd = DIALOG + ' -a "' + path + '"'
     popen = subprocess.Popen(
         cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)

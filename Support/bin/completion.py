@@ -4,7 +4,7 @@ import eclim
 from util import caret_position, completion_popup, \
     completion_popup_with_snippet
 
-class ImportProposal(object):
+class CompletionProposal(object):
     def __init__(self, name, insert=None, type="None"):
         self.name = name
         self.display = name
@@ -31,7 +31,7 @@ def to_proposals(eclim_output):
         parts = l.split("|")
 
         if parts[1]:
-            prop = ImportProposal(parts[1])
+            prop = CompletionProposal(parts[1])
             results.append(prop)
         else:
             variants = parts[3].split("<br/>")
@@ -43,7 +43,7 @@ def to_proposals(eclim_output):
                                     for i,s in 
                                     zip(range(1,len(params)+1), params)
                                     ])
-                props.append(ImportProposal(variants[idx], insert))
+                props.append(CompletionProposal(variants[idx], insert))
                 with_snippets = True
             results.extend(props)
         

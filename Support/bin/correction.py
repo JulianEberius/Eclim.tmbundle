@@ -7,16 +7,16 @@ from util import caret_position
 def call_eclim(project, file, line, offset, applied_correction=None):
     eclim.update_java_src(project, file)
 
-    complete_cmd = "$ECLIM -command java_correct \
+    correct_cmd = "$ECLIM -command java_correct \
                 -p %s \
                 -f %s \
                 -l %i \
                 -o %i \
                 -e utf-8 " % (project, file, line, offset)
     if applied_correction != None:
-        complete_cmd += " -a %i" % (applied_correction)
+        correct_cmd += " -a %i" % (applied_correction)
     
-    out = eclim.call_eclim(complete_cmd)
+    out = eclim.call_eclim(correct_cmd)
     return out
     
 def show_corrections_window(corrections):
