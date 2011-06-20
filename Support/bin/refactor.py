@@ -6,12 +6,7 @@ import util
 from util import caret_position, current_identifier
 
 
-def call_eclim(project, file, length, offset, new_name): 
-    '''
-java_refactor_rename -p com.sap.research.amc.matchingprocess.dynamic -f
-src/com/sap/research/amc/matchingprocess/dynamic/DynamicProcessRunner.java -o
-1085 -e utf-8 -l 12 -n nag 
-    ''' 
+def call_eclim(project, file, length, offset, new_name):
     eclim.update_java_src(project, file)
     rename_cmd = "$ECLIM -command java_refactor_rename \
                 -p %s \
